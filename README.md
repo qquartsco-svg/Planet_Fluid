@@ -22,7 +22,8 @@ Planet_Fluid/
 │   ├── regenerate_signature.py
 │   ├── verify_signature.py
 │   ├── release_check.py
-│   └── cleanup_generated.py
+│   ├── cleanup_generated.py
+│   └── sync_from_staging.sh
 ├── BLOCKCHAIN_INFO.md
 ├── BLOCKCHAIN_INFO_EN.md
 ├── SIGNATURE.sha256
@@ -64,6 +65,13 @@ cd ../Oceanus_Engine && python -m pytest tests/ -q
 
 ```bash
 python scripts/release_check.py
+```
+
+원본 `_staging` 엔진(Eurus/Oceanus) 변경분 동기화:
+
+```bash
+bash scripts/sync_from_staging.sh --dry-run  # 반영 예정 변경 미리 보기
+bash scripts/sync_from_staging.sh            # 실제 동기화 + 루트 서명 갱신
 ```
 
 ---

@@ -16,7 +16,7 @@ Planet_Fluid/
 ├── Oceanus_Engine/        ← planetary ocean kernel
 ├── planet_fluid/          ← umbrella package (version marker)
 ├── examples/run_planet_fluid_demo.py  ← FluidCell → ocean grid (one tick)
-├── scripts/               ← integrity + release_check
+├── scripts/               ← integrity + release_check + upstream sync
 ├── BLOCKCHAIN_INFO*.md
 ├── SIGNATURE.sha256
 └── README.md / README_EN.md
@@ -56,6 +56,13 @@ Full gate (both test suites + manifest verify + cache cleanup):
 
 ```bash
 python scripts/release_check.py
+```
+
+Sync updates from upstream sibling engines in `_staging`:
+
+```bash
+bash scripts/sync_from_staging.sh --dry-run  # preview changes
+bash scripts/sync_from_staging.sh            # apply sync + refresh root signature
 ```
 
 ---
