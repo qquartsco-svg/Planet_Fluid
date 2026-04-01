@@ -8,6 +8,63 @@ Public GitHub repository: **`Planet_Fluid`** (`qquartsco-svg/Planet_Fluid`).
 
 ---
 
+## Engines at a glance
+
+### Eurus_Engine (atmosphere)
+
+- **Scope:** Planetary **shallow-fluid-style atmosphere** dynamics (SWE-class core), Coriolis, vorticity/divergence, **thermodynamics & radiation & CAPE/CIN**, large-scale circulation, pressure systems and fronts, plus **climate regime** and **Ω-style health** — a **weather/climate screening kernel**, not an operations-grade NWP stack.
+- **Planet-agnostic:** `PlanetConfig` presets (Earth/Mars/Venus/…) share one structural skeleton; fidelity stays **screening-level**.
+- **Bridges:** Duck-typed hooks toward sibling stacks (TerraCore / Lucifer / JOE·MOE / Cherubim); see `Eurus_Engine/docs/` and README.
+
+### Oceanus_Engine (ocean)
+
+- **Scope:** **Surface ocean** on a 2D SWE grid (η, H, u, v, Coriolis, **wind stress**), plus **thermohaline**, **tidal harmonics**, **seafloor / plate hooks**, coastal/route utilities, and **Ω-style ocean health** — organized as **L0–L6** contracts and physics layers.
+- **Not vessel autonomy:** it is closer to the **ocean state field** consumed by routing/autonomy stacks than to the vessel brain.
+- **Bridges:** `eurus_wind_adapter` (atmosphere → wind), marine autonomy mapping, optional design-workspace nodes; see Oceanus README.
+
+---
+
+## Fluid mechanics: shared skeleton vs differences
+
+| Axis | Shared | Eurus emphasis | Oceanus emphasis |
+|------|--------|----------------|------------------|
+| **L1 spine** | Rotating frame, **2D SWE-like updates** | Layer thickness, pressure, moisture, radiation, circulation loops | Water column thickness, **wind stress**, lower boundary |
+| **Heat** | Simplified / proxy thermodynamics | Dry/moist lapse, OLR, insolation | Linear EOS, **thermohaline** aggregation |
+| **Forcing / boundaries** | Coriolis | Fronts, cyclones, jets | **Tides**, bathymetry, plate event hooks |
+
+Planet_Fluid coupling today targets the **wind-stress row**: Eurus supplies **surface (u, v)** that Oceanus ingests through the **same API** as arbitrary wind.
+
+---
+
+## Extensibility and operability
+
+- **Dependencies:** Both engines are **stdlib-only**, `requires-python >= 3.10` (see each `pyproject.toml`).
+- **Duck typing:** Oceanus runs without installing Eurus; forcing can be **raw (u, v)** or **FluidCell / WeatherAgent-like** objects.
+- **Monorepo ergonomics:** Sibling folders + `sys.path` bootstrap in `examples/run_planet_fluid_demo.py` — easy to vendor, subtree, or mirror into other repos.
+- **`planet_fluid/`:** Today exposes **meta such as `__version__`** and reserves a future **unified facade**; a single `python -m planet_fluid...` entrypoint can be added without collapsing the two engine trees.
+- **Sync workflow:** Authoritative edits in `_staging` → `scripts/sync_from_staging.sh` → refresh **root** `SIGNATURE.sha256`.
+
+---
+
+## Limits (stay inside the scope)
+
+- **Not GCM/OGCM class:** resolution, physics completeness, DA, and validation are **not** meant to replace operational forecasting.
+- **Coupling is MVP:** **one-way wind forcing** only; two-way heat/moisture/salinity feedback is **out of scope** for now.
+- **Spatial uniformity in the demo:** the adapter path emphasizes **uniform wind** on the grid; **per-cell spatial wind maps** need an explicit extension (loop, reanalysis ingest, or a dedicated mapper).
+- **Safety / certification:** outputs are **screening and design inputs**, not a substitute for certified navigation or regulatory compliance.
+
+---
+
+## Roadmap (candidates)
+
+1. **Spatially varying forcing:** Interpolation / tiling between Eurus cells and Oceanus grids (coupling layer under `planet_fluid` or a dedicated module).
+2. **Optional two-way fluxes:** Minimal SST → boundary layer, evap/precip/salt feedback — only if the stack stays explicitly **lightweight**.
+3. **Unified “Planet Tick” runner:** One script chaining demo → tests → signature (similar to other 00_BRAIN engine playbooks).
+4. **Packaging:** Optional root `pyproject` / documented `pip install -e` layouts for monorepo consumers.
+5. **GitHub metadata:** Repo **About** description, topics, and **Releases** are recommended in GitHub settings (outside this tree).
+
+---
+
 ## Layout
 
 ```
@@ -15,11 +72,19 @@ Planet_Fluid/
 ├── Eurus_Engine/          ← planetary atmosphere kernel
 ├── Oceanus_Engine/        ← planetary ocean kernel
 ├── planet_fluid/          ← umbrella package (meta/version export; facade reserved)
-├── examples/run_planet_fluid_demo.py  ← FluidCell → ocean grid (one tick)
-├── scripts/               ← integrity + release_check + upstream sync
-├── BLOCKCHAIN_INFO*.md
+├── examples/
+│   └── run_planet_fluid_demo.py   ← FluidCell → ocean grid (one tick)
+├── scripts/
+│   ├── regenerate_signature.py
+│   ├── verify_signature.py
+│   ├── release_check.py
+│   ├── cleanup_generated.py
+│   └── sync_from_staging.sh
+├── BLOCKCHAIN_INFO.md
+├── BLOCKCHAIN_INFO_EN.md
 ├── SIGNATURE.sha256
-└── README.md / README_EN.md
+├── README.md / README_EN.md
+└── VERSION
 ```
 
 ---
