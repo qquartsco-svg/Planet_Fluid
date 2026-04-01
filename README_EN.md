@@ -14,7 +14,7 @@ Public GitHub repository: **`Planet_Fluid`** (`qquartsco-svg/Planet_Fluid`).
 Planet_Fluid/
 ├── Eurus_Engine/          ← planetary atmosphere kernel
 ├── Oceanus_Engine/        ← planetary ocean kernel
-├── planet_fluid/          ← umbrella package (version marker)
+├── planet_fluid/          ← umbrella package (meta/version export; facade reserved)
 ├── examples/run_planet_fluid_demo.py  ← FluidCell → ocean grid (one tick)
 ├── scripts/               ← integrity + release_check + upstream sync
 ├── BLOCKCHAIN_INFO*.md
@@ -32,6 +32,18 @@ Planet_Fluid/
 | Ocean-only | call `set_wind_field(u_ms, v_ms)` directly |
 
 `eurus_engine` is **not** a hard dependency of `oceanus_engine` (duck typing). This monorepo places both trees as siblings; the demo prepends their roots to `sys.path`.
+
+Current coupling scope is **one-way MVP (Eurus → Oceanus wind forcing)**.  
+Two-way heat/moisture/salinity feedback coupling is future work.
+
+---
+
+## Use cases (screening)
+
+- Observe first-order transfer from atmospheric wind to ocean surface stress
+- Coupled atmosphere-ocean concept demos for design/education
+- Generate ocean forcing inputs for route/ops decision pipelines
+- Pre-scan environment states before Element_Capture_Foundation workflows
 
 ---
 

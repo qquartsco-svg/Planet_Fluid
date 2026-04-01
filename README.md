@@ -15,7 +15,7 @@ GitHub 공개 저장소 이름: **`Planet_Fluid`** (`qquartsco-svg/Planet_Fluid`
 Planet_Fluid/
 ├── Eurus_Engine/          ← 행성 대기 (SWE, 순환, 전선, Ω 기후·건강)
 ├── Oceanus_Engine/        ← 행성 해양 (SWE 표층, 열염, 조석, 해저·판 훅)
-├── planet_fluid/          ← 우산 패키지(버전 마커)
+├── planet_fluid/          ← 우산 패키지(메타/버전 노출, 통합 facade 예약)
 ├── examples/
 │   └── run_planet_fluid_demo.py   ← Eurus FluidCell → Oceanus 격자 1틱
 ├── scripts/
@@ -41,6 +41,18 @@ Planet_Fluid/
 | Oceanus 단독 | `set_wind_field(u, v)` 로 임의 바람도 동일 경로 |
 
 `eurus_engine` 은 Oceanus 쪽 **필수 의존이 아님**(덕 타이핑). 이 레포는 두 패키지를 **형제 폴더**로 넣어 두었기 때문에 데모는 `sys.path` 로 로드한다.
+
+현재 결합 수준은 **단방향 MVP (Eurus → Oceanus wind forcing)** 이다.  
+양방향 열·수분·염분 피드백 coupling은 후속 확장 범위다.
+
+---
+
+## 활용 포인트 (스크리닝)
+
+- 대기 바람이 해양 표층 전단·응력에 주는 1차 영향 관측
+- 행성 기후-해양 개념 coupling 데모/교육
+- 해류 기반 항로·운용 의사결정의 입력장 생성
+- Element_Capture_Foundation 연동 전 환경 스캐닝 전처리
 
 ---
 
