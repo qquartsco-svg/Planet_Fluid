@@ -142,6 +142,8 @@ bash scripts/sync_from_staging.sh --dry-run  # preview changes
 bash scripts/sync_from_staging.sh            # apply sync + refresh root signature
 ```
 
+Sync **does not overwrite** `Eurus_Engine/README*.md` or `Oceanus_Engine/README*.md` (Planet_Fluid–specific docs). Pull upstream README edits manually when you want them.
+
 ---
 
 ## Integrity (“blockchain signature”)

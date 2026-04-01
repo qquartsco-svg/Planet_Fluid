@@ -35,7 +35,7 @@
 eurus_engine/
 ├── contracts/schemas.py   — PlanetConfig, FluidCell, WeatherAgent, fronts, pressure systems …
 ├── physics/               — fluid_dynamics, thermodynamics, vertical_profile
-├── circulation/         — Hadley, pressure_system, fronts
+├── circulation/           — Hadley, pressure_system, fronts
 ├── climate/regime.py
 ├── health/weather_health.py
 ├── agent/weather_agent.py

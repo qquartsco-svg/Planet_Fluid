@@ -22,6 +22,13 @@ if [[ ! -d "${OCEANUS_SRC}" ]]; then
   exit 1
 fi
 
+# Engine README*.md are curated in Planet_Fluid (monorepo banners, Eurus EN mirror,
+# Oceanus paths). Upstream `_staging` copies do not overwrite them — merge manually if needed.
+READMES_EXCLUDE=(
+  "--exclude=README.md"
+  "--exclude=README_EN.md"
+)
+
 COMMON_EXCLUDES=(
   "--exclude=.git"
   "--exclude=SIGNATURE.sha256"
@@ -40,10 +47,10 @@ COMMON_EXCLUDES=(
 )
 
 echo "[sync] Eurus_Engine  ${EURUS_SRC} -> ${EURUS_DST}"
-rsync -a --delete ${DRY_RUN} "${COMMON_EXCLUDES[@]}" "${EURUS_SRC}" "${EURUS_DST}"
+rsync -a --delete ${DRY_RUN} "${COMMON_EXCLUDES[@]}" "${READMES_EXCLUDE[@]}" "${EURUS_SRC}" "${EURUS_DST}"
 
 echo "[sync] Oceanus_Engine ${OCEANUS_SRC} -> ${OCEANUS_DST}"
-rsync -a --delete ${DRY_RUN} "${COMMON_EXCLUDES[@]}" "${OCEANUS_SRC}" "${OCEANUS_DST}"
+rsync -a --delete ${DRY_RUN} "${COMMON_EXCLUDES[@]}" "${READMES_EXCLUDE[@]}" "${OCEANUS_SRC}" "${OCEANUS_DST}"
 
 if [[ -n "${DRY_RUN}" ]]; then
   echo "[OK] dry-run only (no files changed)"
